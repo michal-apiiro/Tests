@@ -1,4 +1,3 @@
-/* See LICENSE for licensing and NOTICE for copyright. */
 package org.cryptacular.adapter;
 
 import org.bouncycastle.crypto.CipherParameters;

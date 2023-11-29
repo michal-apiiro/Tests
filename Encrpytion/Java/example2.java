@@ -1,4 +1,5 @@
 package com.ulisesbocchio.jasyptspringboot.encryptor;
+
 import com.ulisesbocchio.jasyptspringboot.util.Singleton;
 import lombok.SneakyThrows;
 import org.jasypt.encryption.ByteEncryptor;
