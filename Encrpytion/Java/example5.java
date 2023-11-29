@@ -6,73 +6,17 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.cryptacular.CryptoException;
 
-/**
- * Adapts a {@link AEADBlockCipherAdapter}.
- *
- * @author  Middleware Services
- */
-public class AEADBlockCipherAdapter implements BlockCipherAdapter
-{
 
-  /** All methods delegate to this instance. */
-  private final AEADBlockCipher cipherDelegate;
-
-
-  /**
-   * Creates a new instance that delegates to the given cipher.
-   *
-   * @param  delegate  Adapted cipher.
-   */
-  public AEADBlockCipherAdapter(final AEADBlockCipher delegate)
-  {
-    cipherDelegate = delegate;
-  }
-
-
-  @Override
-  public int getOutputSize(final int len)
-  {
-    return cipherDelegate.getOutputSize(len);
-  }
-
-
-  @Override
-  public void init(final boolean forEncryption, final CipherParameters params) throws CryptoException
-  {
-    try {
-      cipherDelegate.init(forEncryption, params);
-    } catch (RuntimeException e) {
-      throw new CryptoException("Cipher initialization error", e);
+public class JavaEncryptionExample {
+    public static void main(String[] args) throws Exception {
+        // Generate a secret key
+        CipherParameters cipherParameters = CipherParameters.getInstance("AES");
+        AEADBlockCipher secretKey = AEADBlockCipher.generateKey();
+        
+        // Encryption
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedBytes = cipher.doFinal("Hello, World!".getBytes(StandardCharsets.UTF_8));
+        System.out.println("Encrypted: " + new String(encryptedBytes));
     }
-  }
-
-
-  @Override
-  public int processBytes(final byte[] in, final int inOff, final int len, final byte[] out, final int outOff)
-      throws CryptoException
-  {
-    try {
-      return cipherDelegate.processBytes(in, inOff, len, out, outOff);
-    } catch (RuntimeException e) {
-      throw new CryptoException("Cipher processing error", e);
-    }
-  }
-
-
-  @Override
-  public int doFinal(final byte[] out, final int outOff) throws CryptoException
-  {
-    try {
-      return cipherDelegate.doFinal(out, outOff);
-    } catch (InvalidCipherTextException e) {
-      throw new CryptoException("Error finalizing cipher", e);
-    }
-  }
-
-
-  @Override
-  public void reset()
-  {
-    cipherDelegate.reset();
-  }
 }

@@ -5,6 +5,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
+
 public class JavaEncryptionExample {
     public static void main(String[] args) throws Exception {
         // Generate a secret key

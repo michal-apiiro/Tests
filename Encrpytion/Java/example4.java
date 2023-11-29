@@ -27,53 +27,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 
-/**
- * A command-line utility for signing JSON Web Tokens (JWTs).
- *
- * <p>It loads cleartext private keys from disk - this is not recommended!
- *
- * <p>It requires the following arguments:
- *
- * <ul>
- *   <li>private-keyset-file: Name of the input file containing the private keyset.
- *   <li>audience: The audience claim to be used in the token
- *   <li>token-file: name of the output file containing the signed JWT.
- */
-public final class JwtSign {
-  public static void main(String[] args) throws Exception {
-    if (args.length != 3) {
-      System.err.printf("Expected 3 parameters, got %d\n", args.length);
-      System.err.println(
-          "Usage: java JwtSign private-keyset-file audience token-file");
-      System.exit(1);
+
+public class JavaEncryptionExample {
+    public static void main(String[] args) throws Exception {
+        // Generate a secret key
+        KeysetHandle cipherParameters = KeysetHandle.getInstance("AES");
+        AEADBlockCipher secretKey = AEADBlockCipher.generateKey();
+        
+        // Encryption
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedBytes = cipher.doFinal("Hello, World!".getBytes(StandardCharsets.UTF_8));
+        System.out.println("Encrypted: " + new String(encryptedBytes));
     }
-
-    Path privateKeysetFile = Paths.get(args[0]);
-    String audience = args[1];
-    Path tokenFile = Paths.get(args[2]);
-
-    // Register all JWT signature key types with the Tink runtime.
-    JwtSignatureConfig.register();
-
-    // Read the private keyset into a KeysetHandle.
-    KeysetHandle privateKeysetHandle =
-        TinkJsonProtoKeysetFormat.parseKeyset(
-            new String(Files.readAllBytes(privateKeysetFile), UTF_8),
-            InsecureSecretKeyAccess.get());
-
-    // Get the primitive.
-    JwtPublicKeySign signer = privateKeysetHandle.getPrimitive(JwtPublicKeySign.class);
-
-    // Use the primitive to sign a token that expires in 100 seconds.
-    RawJwt rawJwt =
-        RawJwt.newBuilder()
-            .addAudience(audience)
-            .setExpiration(Instant.now().plusSeconds(100))
-            .build();
-    String signedToken = signer.signAndEncode(rawJwt);
-    Files.write(tokenFile, signedToken.getBytes(UTF_8));
-  }
-
-  private JwtSign() {}
 }
-// [END java-jwt-sign-example]
