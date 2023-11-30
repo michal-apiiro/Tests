@@ -1,61 +1,165 @@
-import OpenAI from 'openai';
-import FineTuningJobEvent from 'openai/resources/fine-tuning';
+import OpenAI, { toFile } from 'openai';
+import fs from 'fs';
+import { distance } from 'fastest-levenshtein';
+import { test, expect } from 'bun:test';
+import { ChatCompletion } from 'openai/resources/chat/completions';
 
-// Gets the API Key from the environment variable `OPENAI_API_KEY`
+const url = 'https://audio-samples.github.io/samples/mp3/blizzard_biased/sample-1.mp3';
+const filename = 'sample-1.mp3';
+
+const correctAnswer =
+  'It was anxious to find him no one that expectation of a man who were giving his father enjoyment. But he was avoided in sight in the minister to which indeed,';
+const model = 'whisper-1';
+
 const client = new OpenAI();
 
-async function main() {
-  console.log(`Uploading file`);
-
-  let file = await client.files.create({
-    file: fs.createReadStream('./examples/fine-tuning-data.jsonl'),
-    purpose: 'fine-tune',
-  });
-  console.log(`Uploaded file with ID: ${file.id}`);
-
-  console.log('-----');
-
-  console.log(`Waiting for file to be processed`);
-  while (true) {
-    file = await client.files.retrieve(file.id);
-    console.log(`File status: ${file.status}`);
-
-    if (file.status === 'processed') {
-      break;
-    } else {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-  }
-
-  console.log('-----');
-
-  console.log(`Starting fine-tuning`);
-  let fineTune = await client.fineTuning.jobs.create({ model: 'gpt-3.5-turbo', training_file: file.id });
-  console.log(`Fine-tuning ID: ${fineTune.id}`);
-
-  console.log('-----');
-
-  console.log(`Track fine-tuning progress:`);
-
-  const events: Record<string, FineTuningJobEvent> = {};
-
-  while (fineTune.status == 'running' || fineTune.status == 'created') {
-    fineTune = await client.fineTuning.jobs.retrieve(fineTune.id);
-    console.log(`${fineTune.status}`);
-
-    const { data } = await client.fineTuning.jobs.listEvents(fineTune.id, { limit: 100 });
-    for (const event of data.reverse()) {
-      if (event.id in events) continue;
-      events[event.id] = event;
-      const timestamp = new Date(event.created_at * 1000);
-      console.log(`- ${timestamp.toLocaleTimeString()}: ${event.message}`);
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-  }
+async function typeTests() {
+  await client.audio.transcriptions.create({ file: { foo: true }, model: 'whisper-1' });
+  await client.audio.transcriptions.create({ file: null, model: 'whisper-1' });
+  await client.audio.transcriptions.create({ file: 'test', model: 'whisper-1' });
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
+function expectSimilar(received: any, comparedTo: string, expectedDistance: number) {
+  const message = () =>
+    [
+      `Received: ${JSON.stringify(received)}`,
+      `Expected: ${JSON.stringify(comparedTo)}`,
+      `Expected distance: ${expectedDistance}`,
+      `Received distance: ${actualDistance}`,
+    ].join('\n');
+
+  const actualDistance = distance(received, comparedTo);
+  expect(actualDistance).toBeLessThan(expectedDistance);
+}
+
+test(`basic request works`, async function () {
+  const completion = await client.chat.completions.create({
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: 'Say this is a test' }],
+  });
+  expectSimilar(completion.choices[0]?.message?.content, 'This is a test', 10);
+});
+
+test(`raw response`, async function () {
+  const response = await client.chat.completions
+    .create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: 'Say this is a test' }],
+    })
+    .asResponse();
+
+  // test that we can use web Response API
+  const { body } = response;
+  if (!body) throw new Error('expected response.body to be defined');
+
+  const reader = body.getReader();
+  const chunks: Uint8Array[] = [];
+  let result;
+  do {
+    result = await reader.read();
+    if (!result.done) chunks.push(result.value);
+  } while (!result.done);
+
+  reader.releaseLock();
+
+  let offset = 0;
+  const merged = new Uint8Array(chunks.reduce((total, chunk) => total + chunk.length, 0));
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.length;
+  }
+
+  const json: ChatCompletion = JSON.parse(new TextDecoder().decode(merged));
+  expectSimilar(json.choices[0]?.message.content || '', 'This is a test', 10);
+});
+
+test(`streaming works`, async function () {
+  const stream = await client.chat.completions.create({
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: 'Say this is a test' }],
+    stream: true,
+  });
+  const chunks = [];
+  for await (const part of stream) {
+    chunks.push(part);
+  }
+  expectSimilar(chunks.map((c) => c.choices[0]?.delta.content || '').join(''), 'This is a test', 10);
+});
+
+// @ts-ignore avoid DOM lib for testing purposes
+if (typeof File !== 'undefined') {
+  test('handles builtinFile', async function () {
+    const file = await fetch(url)
+      .then((x) => x.arrayBuffer())
+      // @ts-ignore avoid DOM lib for testing purposes
+      .then((x) => new File([x], filename));
+
+    const result = await client.audio.transcriptions.create({ file, model });
+    expectSimilar(result.text, correctAnswer, 12);
+  });
+}
+
+test('handles Response', async function () {
+  const file = await fetch(url);
+
+  const result = await client.audio.transcriptions.create({ file, model });
+  expectSimilar(result.text, correctAnswer, 12);
+});
+
+test('handles fs.ReadStream', async function () {
+  const result = await client.audio.transcriptions.create({
+    file: fs.createReadStream('sample1.mp3'),
+    model,
+  });
+  expectSimilar(result.text, correctAnswer, 12);
+});
+
+const fineTune = `{"prompt": "<prompt text>", "completion": "<ideal generated text>"}`;
+
+// @ts-ignore avoid DOM lib for testing purposes
+if (typeof Blob !== 'undefined') {
+  test('toFile handles builtin Blob', async function () {
+    const result = await client.files.create({
+      file: await toFile(
+        // @ts-ignore avoid DOM lib for testing purposes
+        new Blob([new TextEncoder().encode(fineTune)]),
+        'finetune.jsonl',
+      ),
+      purpose: 'fine-tune',
+    });
+    expect(result.status).toEqual('uploaded');
+  });
+}
+test('toFile handles Uint8Array', async function () {
+  const result = await client.files.create({
+    file: await toFile(
+      // @ts-ignore avoid DOM lib for testing purposes
+      new TextEncoder().encode(fineTune),
+      'finetune.jsonl',
+    ),
+    purpose: 'fine-tune',
+  });
+  expect(result.status).toEqual('uploaded');
+});
+test('toFile handles ArrayBuffer', async function () {
+  const result = await client.files.create({
+    file: await toFile(
+      // @ts-ignore avoid DOM lib for testing purposes
+      new TextEncoder().encode(fineTune).buffer,
+      'finetune.jsonl',
+    ),
+    purpose: 'fine-tune',
+  });
+  expect(result.status).toEqual('uploaded');
+});
+test('toFile handles DataView', async function () {
+  const result = await client.files.create({
+    file: await toFile(
+      // @ts-ignore avoid DOM lib for testing purposes
+      new DataView(new TextEncoder().encode(fineTune).buffer),
+      'finetune.jsonl',
+    ),
+    purpose: 'fine-tune',
+  });
+  expect(result.status).toEqual('uploaded');
 });

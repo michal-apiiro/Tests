@@ -1,70 +1,31 @@
-#!/usr/bin/env -S npm run tsn -T
-
-/**
- * Fine-tuning allows you to train models on your own data.
- *
- * See this guide for more information:
- * - https://platform.openai.com/docs/guides/fine-tuning
- */
-
-const {OpenAI} = require('openai');
-const { FineTuningJobEvent } = require('openai/resources/fine-tuning');
-
-// Gets the API Key from the environment variable `OPENAI_API_KEY`
-const client = new OpenAI();
-
-async function main() {
-  console.log(`Uploading file`);
-
-  let file = await client.files.create({
-    file: fs.createReadStream('./examples/fine-tuning-data.jsonl'),
-    purpose: 'fine-tune',
-  });
-  console.log(`Uploaded file with ID: ${file.id}`);
-
-  console.log('-----');
-
-  console.log(`Waiting for file to be processed`);
-  while (true) {
-    file = await client.files.retrieve(file.id);
-    console.log(`File status: ${file.status}`);
-
-    if (file.status === 'processed') {
-      break;
-    } else {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-  }
-
-  console.log('-----');
-
-  console.log(`Starting fine-tuning`);
-  let fineTune = await client.fineTuning.jobs.create({ model: 'gpt-3.5-turbo', training_file: file.id });
-  console.log(`Fine-tuning ID: ${fineTune.id}`);
-
-  console.log('-----');
-
-  console.log(`Track fine-tuning progress:`);
-
-  const events: Record<string, FineTuningJobEvent> = {};
-
-  while (fineTune.status == 'running' || fineTune.status == 'created') {
-    fineTune = await client.fineTuning.jobs.retrieve(fineTune.id);
-    console.log(`${fineTune.status}`);
-
-    const { data } = await client.fineTuning.jobs.listEvents(fineTune.id, { limit: 100 });
-    for (const event of data.reverse()) {
-      if (event.id in events) continue;
-      events[event.id] = event;
-      const timestamp = new Date(event.created_at * 1000);
-      console.log(`- ${timestamp.toLocaleTimeString()}: ${event.message}`);
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-  }
-}
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+  apiKey: "your_api_key",
 });
+const openai = new OpenAIApi(configuration);
+openai
+  .createCompletion({
+    model: "text-davinci-003",
+    prompt: "Say this is a test",
+    max_tokens: 7,
+    temperature: 0,
+  })
+  .then((response) => console.log(response.data));
+
+/* Sample Output:
+{
+  id: 'cmpl-7GOXgfW5pbHTfTs0tWHo74jReaqYI',
+  object: 'text_completion',
+  created: 1684141944,
+  model: 'text-davinci-003',
+  choices: [
+    {
+      text: '\n\nThis is indeed a test',
+      index: 0,
+      logprobs: null,
+      finish_reason: 'length'
+    }
+  ],
+  usage: { prompt_tokens: 5, completion_tokens: 7, total_tokens: 12 }
+}
+*/
