@@ -1,12 +1,3 @@
-#!/usr/bin/env -S npm run tsn -T
-
-/**
- * Fine-tuning allows you to train models on your own data.
- *
- * See this guide for more information:
- * - https://platform.openai.com/docs/guides/fine-tuning
- */
-
 import OpenAI from 'openai';
 import FineTuningJobEvent from 'openai/resources/fine-tuning';
 
