@@ -14,15 +14,27 @@ import java.time.Instant;
 
 
 public class JavaEncryptionExample {
-    public static void main(String[] args) throws Exception {
-        // Generate a secret key
-        KeysetHandle cipherParameters = KeysetHandle.getInstance("AES");
-        AEADBlockCipher secretKey = AEADBlockCipher.generateKey();
-        
-        // Encryption
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedBytes = cipher.doFinal("Hello, World!".getBytes(StandardCharsets.UTF_8));
-        System.out.println("Encrypted: " + new String(encryptedBytes));
+    public static void main(String[] args){
+        String keysetFilePath = "path/to/jwt-keyset.json";
+        KeysetHandle jwtKeysetHandle = KeysetHandle.read(JsonKeysetReader.withFile(new File(keysetFilePath)));
+
+        // Create a JwtPublicKeySign for signing JWTs
+        JwtPublicKeySign jwtSign = jwtKeysetHandle.getPrimitive(JwtPublicKeySign.class);
+
+        // Example of signing a JWT
+        String unsignedJwt = "{'sub':'1234567890','name':'John Doe','iat':1516239022}";
+        String signedJwt = jwtSign.sign(unsignedJwt);
+        System.out.println("Signed JWT: " + signedJwt);
+
+        // Create a JwtPublicKeyVerify for verifying JWTs
+        JwtPublicKeyVerify jwtVerify = jwtKeysetHandle.getPrimitive(JwtPublicKeyVerify.class);
+
+        // Example of verifying a JWT
+        try {
+            jwtVerify.verify(signedJwt);
+            System.out.println("JWT verification successful.");
+        } catch (GeneralSecurityException e) {
+            System.out.println("JWT verification failed: " + e.getMessage());
+        }
     }
 }
