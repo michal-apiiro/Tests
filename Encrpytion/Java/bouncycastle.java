@@ -26,19 +26,5 @@ public class JavaEncryptionExample {
         byte[] plaintext = "Hello, World!".getBytes();
         byte[] ciphertext = new byte[cipher.getOutputSize(plaintext.length)];
 
-        int len = cipher.processBytes(plaintext, 0, plaintext.length, ciphertext, 0);
-        len += cipher.doFinal(ciphertext, len);
-
-        System.out.println("Ciphertext: " + new String(ciphertext));
-
-        // Example of decrypting the message
-        cipher.init(false, parameters);  // Re-initialize for decryption
-        byte[] decryptedBytes = new byte[cipher.getOutputSize(ciphertext.length)];
-
-        len = cipher.processBytes(ciphertext, 0, ciphertext.length, decryptedBytes, 0);
-        len += cipher.doFinal(decryptedBytes, len);
-
-        System.out.println("Decrypted: " + new String(decryptedBytes));
-
     }
 }
