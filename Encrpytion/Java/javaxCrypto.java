@@ -5,6 +5,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.spec.DESKeySpec;
 
 public class JavaEncryptionExample {
     public static void main(String[] args) throws Exception {
@@ -15,5 +16,6 @@ public class JavaEncryptionExample {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] encryptedBytes = cipher.doFinal("Hello, World!".getBytes(StandardCharsets.UTF_8));
+        DESKeySpec desKey = new DESKeySpec(input);
     }
 }
