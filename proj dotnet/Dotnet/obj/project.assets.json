@@ -276,11 +276,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/apiiro/code/examples_openai/HuggingFace/Dotnet_proj/example.csproj",
+      "projectUniqueName": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj",
       "projectName": "example",
-      "projectPath": "/Users/apiiro/code/examples_openai/HuggingFace/Dotnet_proj/example.csproj",
+      "projectPath": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj",
       "packagesPath": "/Users/apiiro/.nuget/packages/",
-      "outputPath": "/Users/apiiro/code/examples_openai/HuggingFace/Dotnet_proj/obj/",
+      "outputPath": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/apiiro/.nuget/NuGet/NuGet.Config"

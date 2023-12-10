@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BMO65o9dFfpLlQjAZqshYtfNv0zVsZLsvcQGg3PtFxDdqxJMom6AuaiJsw9UAK4IMPKpoL5qF3fkYP8KAuHNow==",
+  "dgSpecHash": "W69vO4+svwAs2JPAqCiK/JBg8PzIKZcLe9Xr1eSAbSoJU1wk5uWSB2LRNf4kiqdx/GxUaDnl85XB3TFYIyA0oA==",
   "success": true,
-  "projectFilePath": "/Users/apiiro/code/examples_openai/HuggingFace/Dotnet_proj/example.csproj",
+  "projectFilePath": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj",
   "expectedPackageFiles": [
     "/Users/apiiro/.nuget/packages/carter/7.2.0/carter.7.2.0.nupkg.sha512",
     "/Users/apiiro/.nuget/packages/fluentvalidation/11.0.1/fluentvalidation.11.0.1.nupkg.sha512",
