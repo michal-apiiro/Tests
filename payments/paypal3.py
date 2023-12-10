@@ -7,18 +7,19 @@ from paypalrestsdk import Sale
 import logging
 logging.basicConfig(level=logging.INFO)
 
-sale = Sale.find("7DY409201T7922549")
+def python_payment():
+    sale = Sale.find("7DY409201T7922549")
 
-# Make Refund API call
-# Set amount only if the refund is partial
-refund = sale.refund({
-    "amount": {
-        "total": "0.01",
-        "currency": "USD"}})
+    # Make Refund API call
+    # Set amount only if the refund is partial
+    refund = sale.refund({
+        "amount": {
+            "total": "0.01",
+            "currency": "USD"}})
 
-# Check refund status
-if refund.success():
-    print("Refund[%s] Success" % (refund.id))
-else:
-    print("Unable to Refund")
-    print(refund.error)
+    # Check refund status
+    if refund.success():
+        print("Refund[%s] Success" % (refund.id))
+    else:
+        print("Unable to Refund")
+        print(refund.error)

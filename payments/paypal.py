@@ -2,12 +2,13 @@ from paypalrestsdk import Payment
 import logging
 logging.basicConfig(level=logging.INFO)
 
-# ID of the payment. This ID is provided when creating payment.
-payment = new Payment()
-payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
 
-# PayerID is required to approve the payment.
-if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):  # return True or False
-    print("Payment[%s] execute successfully" % (payment.id))
-else:
-    print(payment.error)
+def python_payment():
+# ID of the payment. This ID is provided when creating payment.
+    payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
+
+    # PayerID is required to approve the payment.
+    if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):  # return True or False
+        print("Payment[%s] execute successfully" % (payment.id))
+    else:
+        print(payment.error)
