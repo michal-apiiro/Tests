@@ -3,6 +3,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 # ID of the payment. This ID is provided when creating payment.
+payment = new Payment()
 payment = Payment.find("PAY-28103131SP722473WKFD7VGQ")
 
 # PayerID is required to approve the payment.
