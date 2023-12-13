@@ -36,7 +36,7 @@ def main():
         discount_amount=40,
         recurring=True
     )
-    paddle.list_products()
+    paddle.list_transactions()
     paddle.list_transactions(entity='subscription', entity_id=subscription_id)
     paddle.refund_payment(order_id=order_id, amount=amount, reason=reason)
     paddle.list_plans()
