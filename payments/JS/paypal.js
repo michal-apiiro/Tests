@@ -1,11 +1,11 @@
-const paypal = require('paypal-rest-sdk')
+import { configure, payment as _payment } from 'paypal-rest-sdk'
 
 class PayPalController {
   constructor () {
     this.PAYPAL_RETURN_URL = `${Env.get('APP_URL')}/api/paypal/success`
     this.PAYPAL_CANCEL_URL = `${Env.get('APP_URL')}/api/paypal/cancel`
 
-    paypal.configure({
+    configure({
       mode: 'sandbox',
       client_id: Env.get('PAYPAL_ID'),
       client_secret: Env.get('PAYPAL_SECRET')
@@ -42,7 +42,7 @@ class PayPalController {
 
   getPayPalSuccessDetails(paymentId, paymentDetails){
     return new Promise((resolve, reject) => {
-      paypal.payment.execute(paymentId, paymentDetails, (err) => {
+      _payment.execute(paymentId, paymentDetails, (err) => {
         if (err) {
           return reject(err)
         }
@@ -73,7 +73,7 @@ class PayPalController {
 
   createPaypalPayment (description, amount, currency) {
     return new Promise((resolve, reject) => {
-      paypal.payment.create(this.getPaymentDetails(description, amount, currency), (err, payment) => {
+      _payment.create(this.getPaymentDetails(description, amount, currency), (err, payment) => {
         if (err) {
           return reject(err)
         }
@@ -91,4 +91,4 @@ class PayPalController {
   }
 }
 
-module.exports = PayPalController
+export default PayPalController
