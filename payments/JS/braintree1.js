@@ -1,5 +1,3 @@
-'use strict';
-
 var BasePaymentMethodView = require('./base-payment-method-view');
 var PayPal = require('braintree-web/paypal');
 
