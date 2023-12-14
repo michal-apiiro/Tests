@@ -41,7 +41,7 @@ class PayPalController {
     return view.render('api.paypal', { result: true, canceled: true })
   }
 
-  getPayPalSuccessDetails(paymentId, paymentDetails){
+  async getPayPalSuccessDetails(paymentId, paymentDetails){
     return new Promise((resolve, reject) => {
       paypal.payment.execute(paymentId, paymentDetails, (err) => {
         if (err) {
@@ -72,7 +72,7 @@ class PayPalController {
     }
   }
 
-  createPaypalPayment (description, amount, currency) {
+  async createPaypalPayment (description, amount, currency) {
     return new Promise((resolve, reject) => {
       paypal.payment.create(this.getPaymentDetails(description, amount, currency), (err, payment) => {
         if (err) {
