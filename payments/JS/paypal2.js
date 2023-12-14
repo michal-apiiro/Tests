@@ -1,5 +1,6 @@
 const paypal = require('paypal-rest-sdk')
 
+
 class PayPalController {
   constructor () {
     this.PAYPAL_RETURN_URL = `${Env.get('APP_URL')}/api/paypal/success`
