@@ -1,6 +1,4 @@
-var BasePaymentMethodView = require('./base-payment-method-view');
-var PayPal = require('braintree-web/paypal');
-
+import  PayPal  from 'braintree-web/paypal';
 async function main(){
     PayPal.create({
         client: clientInstance
