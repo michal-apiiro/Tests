@@ -2,7 +2,7 @@ var BasePaymentMethodView = require('./base-payment-method-view');
 var PayPal = require('braintree-web/paypal');
 
 async function main(){
-    braintree.paypal.create({
+    PayPal.create({
         client: clientInstance
       }, function (paypalErr, paypalInstance) {
         if (paypalErr) {
