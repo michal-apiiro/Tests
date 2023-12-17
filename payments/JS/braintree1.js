@@ -8,6 +8,6 @@ async function main(){
         if (paypalErr) {
           console.error('Error creating PayPal:', paypalErr);
           return;
-        }
-}
-}
+      }
+    })
+  }
