@@ -2,13 +2,13 @@
 
 const Razorpay = require('razorpay')
 
-let razorpay = new Razorpay({
+let razor = new Razorpay({
   key_id: process.env.KEY_ID, // your `KEY_ID`
   key_secret: process.env.KEY_SECRET // your `KEY_SECRET`
 })
 
 async function main(){
-    try {
+        try {
 		const response = await razorpay.orders.create(options);
 		res.json({
 			status:true,
