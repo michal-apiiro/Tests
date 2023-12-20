@@ -1,83 +1,59 @@
-package paypal
+package paypal_test
 
 import (
 	"context"
-	"fmt"
+
+	"github.com/plutov/paypal/v4"
 )
 
-// CreatePayout submits a payout with an asynchronous API call, which immediately returns the results of a PayPal payment.
-// For email payout set RecipientType: "EMAIL" and receiver email into Receiver
-// Endpoint: POST /v1/payments/payouts
-func (c *Client) CreatePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
-	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts"), p)
-	response := &PayoutResponse{}
-
+func Example() {
+	// Initialize client
+	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 	if err != nil {
-		return response, err
+		panic(err)
 	}
 
-	if err = c.SendWithAuth(req, response); err != nil {
-		return response, err
+	// Retrieve access token
+	_, err = c.GetAccessToken(context.Background())
+	if err != nil {
+		panic(err)
 	}
-
-	return response, nil
 }
 
-// CreateSinglePayout is deprecated, use CreatePayout instead.
-func (c *Client) CreateSinglePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
-	return c.CreatePayout(ctx, p)
-}
-
-// GetPayout shows the latest status of a batch payout along with the transaction status and other data for individual items.
-// Also, returns IDs for the individual payout items. You can use these item IDs in other calls.
-// Endpoint: GET /v1/payments/payouts/ID
-func (c *Client) GetPayout(ctx context.Context, payoutBatchID string) (*PayoutResponse, error) {
-	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts/"+payoutBatchID), nil)
-	response := &PayoutResponse{}
-
+func ExampleClient_CreatePayout_Venmo() {
+	// Initialize client
+	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 	if err != nil {
-		return response, err
+		panic(err)
 	}
 
-	if err = c.SendWithAuth(req, response); err != nil {
-		return response, err
-	}
-
-	return response, nil
-}
-
-// GetPayoutItem shows the details for a payout item.
-// Use this call to review the current status of a previously unclaimed, or pending, payout item.
-// Endpoint: GET /v1/payments/payouts-item/ID
-func (c *Client) GetPayoutItem(ctx context.Context, payoutItemID string) (*PayoutItemResponse, error) {
-	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts-item/"+payoutItemID), nil)
-	response := &PayoutItemResponse{}
-
+	// Retrieve access token
+	_, err = c.GetAccessToken(context.Background())
 	if err != nil {
-		return response, err
+		panic(err)
 	}
 
-	if err = c.SendWithAuth(req, response); err != nil {
-		return response, err
+	// Set payout item with Venmo wallet
+	payout := paypal.Payout{
+		SenderBatchHeader: &paypal.SenderBatchHeader{
+			SenderBatchID: "Payouts_2018_100007",
+			EmailSubject:  "You have a payout!",
+			EmailMessage:  "You have received a payout! Thanks for using our service!",
+		},
+		Items: []paypal.PayoutItem{
+			{
+				RecipientType:   "EMAIL",
+				RecipientWallet: paypal.VenmoRecipientWallet,
+				Receiver:        "receiver@example.com",
+				Amount: &paypal.AmountPayout{
+					Value:    "9.87",
+					Currency: "USD",
+				},
+				Note:         "Thanks for your patronage!",
+				SenderItemID: "201403140001",
+			},
+		},
 	}
 
-	return response, nil
-}
-
-// CancelPayoutItem cancels an unclaimed Payout Item. If no one claims the unclaimed item within 30 days,
-// the funds are automatically returned to the sender. Use this call to cancel the unclaimed item before the automatic 30-day refund.
-// Endpoint: POST /v1/payments/payouts-item/ID/cancel
-func (c *Client) CancelPayoutItem(ctx context.Context, payoutItemID string) (*PayoutItemResponse, error) {
-	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts-item/"+payoutItemID+"/cancel"), nil)
-	response := &PayoutItemResponse{}
-
-	if err != nil {
-		return response, err
-	}
-
-	if err = c.SendWithAuth(req, response); err != nil {
-		return response, err
-	}
-
-	return response, nil
+	c.CreatePayout(context.Background(), payout)
 }
