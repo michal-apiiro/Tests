@@ -1,7 +1,5 @@
 import Adyen
 
-
-
 def main():
     adyen = Adyen.Adyen()
     adyen.payment.client.xapikey = "YOUR_API_KEY"

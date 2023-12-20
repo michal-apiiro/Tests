@@ -1,6 +1,5 @@
 import mangopay from 'mangopay2-nodejs-sdk';
 
-
 async function main(){
     var api = new mangopay({
         clientId: 'your_client_id',
