@@ -1,6 +1,6 @@
 from mangopaysdk.mangopayapi import MangoPayApi
 from mangopaysdk.entities.wallet import Wallet
-
+from mangopaysdk import *
 def mangoPay():
     api = MangoPayApi()
     api.Config.ClientID = 'sdk-unit-tests'
