@@ -11,6 +11,7 @@ class Program
         api.Config.ClientPassword = "YourClientPassword";
         api.Config.BaseUrl = "https://api.sandbox.mangopay.com"; // or production URL
 
+
         // Use the API here for various operations
         // For example, creating a user:
         var user = new UserNatural
@@ -24,5 +25,6 @@ class Program
         };
 
         var createdUser = api.Users.Create(user);
+        var users = api.Users.GetAll();
     }
 }

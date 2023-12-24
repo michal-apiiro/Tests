@@ -35,6 +35,6 @@ class Program
         request.RequestBody(payment);
 
         var response = client.Execute(request);
-        var createdPayment = response.Result<Payment>();
+
     }
 }
