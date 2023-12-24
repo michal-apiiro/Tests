@@ -12,5 +12,5 @@ def mangoPay():
     wallet.Currency = 'EUR'
     wallet.Description = 'WALLET IN EUR'
 
-    saved_wallet = wallets.Create(wallet)  # assuming that `wallets` is part of the imported module
+    saved_wallet =  api.wallets.Create(wallet)
     return saved_wallet
