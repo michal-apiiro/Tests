@@ -10,12 +10,9 @@ namespace Samples
 {
     public class PayPalClient
     {
-        /**
-            Setting up PayPal environment with credentials with sandbox cerdentails. 
-            For Live, this should be LiveEnvironment Instance. 
-         */
-        public static PayPalEnvironment environment()
+          static void Main()
         {
+      
             return new SandboxEnvironment(
                  System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID") != null ?
                  System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID"):"<<PAYPAL-CLIENT-ID>>",
