@@ -1,51 +1,40 @@
-using System;
-using PayPalCheckoutSdk.Core;
-using PayPalHttp;
+using PayPal.Core;
+using PayPal.v1.Payments;
 
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
-
-namespace Samples
+class Program
 {
-    public class PayPalClient
+    static void Main()
     {
-          static void Main()
-        {
-      
-            return new SandboxEnvironment(
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID") != null ?
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_ID"):"<<PAYPAL-CLIENT-ID>>",
-                System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET") != null ?
-                 System.Environment.GetEnvironmentVariable("PAYPAL_CLIENT_SECRET"):"<<PAYPAL-CLIENT-SECRET>>");
-        }
+        var environment = new SandboxEnvironment("Your-Client-Id", "Your-Secret-Key");
+        var client = new PayPalHttpClient(environment);
 
-        /**
-            Returns PayPalHttpClient instance which can be used to invoke PayPal API's.
-         */
-        public static HttpClient client()
+        // Use the client for various PayPal operations
+        // For example, creating a payment:
+        var payment = new Payment
         {
-            return new PayPalHttpClient(environment());
-        }
+            Intent = "sale",
+            Transactions = new List<Transaction>
+            {
+                new Transaction
+                {
+                    Amount = new Amount
+                    {
+                        Total = "10.00",
+                        Currency = "USD"
+                    }
+                }
+            },
+            RedirectUrls = new RedirectUrls
+            {
+                ReturnUrl = "https://example.com/success",
+                CancelUrl = "https://example.com/cancel"
+            }
+        };
 
-        public static HttpClient client(string refreshToken)
-        {
-            return new PayPalHttpClient(environment(), refreshToken);
-        }
+        var request = new PaymentCreateRequest();
+        request.RequestBody(payment);
 
-        /**
-            This method can be used to Serialize Object to JSON string.
-        */
-        public static String ObjectToJSONString(Object serializableObject)
-        {
-            MemoryStream memoryStream = new MemoryStream();
-            var writer = JsonReaderWriterFactory.CreateJsonWriter(
-                        memoryStream, Encoding.UTF8, true, true, "  ");
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(serializableObject.GetType(), new DataContractJsonSerializerSettings{UseSimpleDictionaryFormat = true});
-            ser.WriteObject(writer, serializableObject);
-            memoryStream.Position = 0;
-            StreamReader sr = new StreamReader(memoryStream);
-            return sr.ReadToEnd();
-        }
+        var response = client.Execute(request);
+        var createdPayment = response.Result<Payment>();
     }
 }
