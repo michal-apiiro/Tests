@@ -46,7 +46,7 @@ public class PaymentWithPayPalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         createPayment(req, resp);
-        req.getRequestDispatcher(“response.jsp”).forward(req, resp);
+        req.getRequestDispatcher("response.jsp").forward(req, resp);
     }
     public Payment createPayment(HttpServletRequest req, HttpServletResponse resp) {
         Payment createdPayment = null;
@@ -56,18 +56,18 @@ public class PaymentWithPayPalServlet extends HttpServlet {
         // (that ensures idempotency). The SDK generates
         // a request id if you do not pass one explicitly.
         APIContext apiContext = new APIContext(clientID, clientSecret, mode);
-        if (req.getParameter(“PayerID”) != null) {
+        if (req.getParameter("PayerID") != null) {
             Payment payment = new Payment();
-            if (req.getParameter(“guid”) != null) {
-                payment.setId(map.get(req.getParameter(“guid”)));
+            if (req.getParameter("guid") != null) {
+                payment.setId(map.get(req.getParameter("guid")));
             }
             PaymentExecution paymentExecution = new PaymentExecution();
-            paymentExecution.setPayerId(req.getParameter(“PayerID”));
+            paymentExecution.setPayerId(req.getParameter("PayerID"));
             try {
                 createdPayment = payment.execute(apiContext, paymentExecution);
-                ResultPrinter.addResult(req, resp, “Executed The Payment”, Payment.getLastRequest(), Payment.getLastResponse(), null);
+                ResultPrinter.addResult(req, resp, "Executed The Payment", Payment.getLastRequest(), Payment.getLastResponse(), null);
             } catch (PayPalRESTException e) {
-                ResultPrinter.addResult(req, resp, “Executed The Payment”, Payment.getLastRequest(), null, e.getMessage());
+                ResultPrinter.addResult(req, resp, "Executed The Payment", Payment.getLastRequest(), null, e.getMessage());
             }
         } else {
             // ###Details
@@ -91,7 +91,7 @@ public class PaymentWithPayPalServlet extends HttpServlet {
             Transaction transaction = new Transaction();
             transaction.setAmount(amount);
             transaction
-                    .setDescription(“This is the payment transaction description.“);
+                    .setDescription("This is the payment transaction description.");
             // ### Items
             Item item = new Item();
             item.setName("Ground Coffee 40 oz").setQuantity("1").setCurrency("USD").setPrice("5");
@@ -110,12 +110,12 @@ public class PaymentWithPayPalServlet extends HttpServlet {
             // Payment Method
             // as ‘paypal’
             Payer payer = new Payer();
-            payer.setPaymentMethod(“paypal”);
+            payer.setPaymentMethod("paypal");
             // ###Payment
             // A Payment Resource; create one using
             // the above types and intent as ‘sale’
             Payment payment = new Payment();
-            payment.setIntent(“sale”);
+            payment.setIntent("sale");
             payment.setPayer(payer);
             payment.setTransactions(transactions);
             // ###Redirect URLs
@@ -124,7 +124,7 @@ public class PaymentWithPayPalServlet extends HttpServlet {
             redirectUrls.setCancelUrl(req.getScheme() + "://"
                     + req.getServerName() +":" + req.getServerPort()
                     + req.getContextPath() + "/paymentwithpaypal?guid=" + guid);
-            redirectUrls.setReturnUrl(req.getScheme() + "“"://"
+            redirectUrls.setReturnUrl(req.getScheme() + "://"
                     + req.getServerName() + ":" + req.getServerPort()
                     + req.getContextPath() + "/paymentwithpaypal?guid=" + guid);
             payment.setRedirectUrls(redirectUrls);
@@ -133,8 +133,8 @@ public class PaymentWithPayPalServlet extends HttpServlet {
             // The return object contains the status;
             try {
                 createdPayment = payment.create(apiContext);
-                LOGGER.info(“Created payment with id = ”
-                        + createdPayment.getId() + ” and status = ”
+                LOGGER.info("Created payment with id = "
+                        + createdPayment.getId() + " and status = "
                         + createdPayment.getState());
                 // ###Payment Approval Url
                 Iterator<Links> links = createdPayment.getLinks().iterator();
