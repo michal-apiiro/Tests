@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Square;
 using Square.Models;
 
+namespace square_
+{
 class Program
 {
     static async Task Main()
@@ -58,4 +60,5 @@ class Program
             Console.WriteLine($"Error: {e.Message}");
         }
     }
+}
 }
