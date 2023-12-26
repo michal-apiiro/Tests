@@ -1,7 +1,0 @@
-query InvalidQueryFieldDoesntExist {
-  complexObjectQuery {
-    id
-    name
-    doesntExist
-  }
-}

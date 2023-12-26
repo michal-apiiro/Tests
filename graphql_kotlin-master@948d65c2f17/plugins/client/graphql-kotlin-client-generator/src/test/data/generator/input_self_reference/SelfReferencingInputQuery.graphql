@@ -1,3 +1,0 @@
-query SelfReferencingInputQuery($input: ComplexArgumentInput) {
-  complexInputObjectQuery(criteria: $input)
-}

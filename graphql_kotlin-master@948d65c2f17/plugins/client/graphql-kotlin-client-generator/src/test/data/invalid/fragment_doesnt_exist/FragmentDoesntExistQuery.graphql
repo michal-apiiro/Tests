@@ -1,5 +1,0 @@
-query FragmentDoesntExistQuery {
-  complexObjectQuery {
-    ...fragmentThatDoesNotExist
-  }
-}

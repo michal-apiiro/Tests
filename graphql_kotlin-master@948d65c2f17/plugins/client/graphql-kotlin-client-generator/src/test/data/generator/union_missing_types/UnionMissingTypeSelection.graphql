@@ -1,9 +1,0 @@
-query UnionMissingTypeSelection {
-  unionQuery {
-    ... on BasicObject {
-      __typename
-      id
-      name
-    }
-  }
-}

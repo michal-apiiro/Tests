@@ -1,3 +1,0 @@
-mutation UpdateNameMutation($name: String!) {
-    updateName(name: $name)
-}

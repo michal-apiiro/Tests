@@ -1,3 +1,0 @@
-query JacksonInputQuery($input: SimpleArgumentInput) {
-  inputObjectQuery(criteria: $input)
-}

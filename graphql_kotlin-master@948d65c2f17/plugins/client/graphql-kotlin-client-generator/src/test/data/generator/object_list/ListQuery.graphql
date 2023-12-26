@@ -1,6 +1,0 @@
-query ListQuery {
-  listQuery {
-    id
-    name
-  }
-}
