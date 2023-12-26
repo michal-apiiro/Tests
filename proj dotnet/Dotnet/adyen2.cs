@@ -1,106 +1,68 @@
+using Adyen.Model.Checkout;
+using Adyen.Service.Checkout;
+using adyen_dotnet_checkout_example.Options;
+using adyen_dotnet_checkout_example.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
-using Adyen.Security;
-using Adyen.Service;
-using Adyen.Model.Nexo;
-using Adyen.Model.Nexo.Message;
-using Adyen.HttpClient;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace LocalAdyenTerminalAPI
+namespace adyen_dotnet_checkout_example.Controllers
 {
-    class Program
+    [ApiController]
+    public class ApiController : ControllerBase
     {
-        static void Main(string[] args)
+        private readonly ILogger<ApiController> _logger;
+        private readonly IUrlService _urlService;
+        private readonly IPaymentsService _paymentsService;
+        private readonly string _merchantAccount;
+        
+        public ApiController(IPaymentsService paymentsService, ILogger<ApiController> logger, IUrlService urlService, IOptions<AdyenOptions> options)
         {
-            // This is a simple console application using the 9.1 .NET Adyen library to make a successful
-            // Local Terminal API call. Please pay close attention to the comments about where you need to edit this to your
-            // own terminal settings
-
-
-            Adyen.Config config = new Adyen.Config
-            {
-                // Please change the IP address below to the Local IP of the terminal that is on the same
-                // network as this application
-                Endpoint = @"https://192.168.0.71:8443/nexo",
-                Environment = Adyen.Model.Enum.Environment.Test
-            };
-
-            Adyen.Client client = new Adyen.Client(config)
-            {
-                HttpClient = new HttpUrlConnectionClient()
-            };
-
-            PosPaymentLocalApi posPaymentLocalApi = new PosPaymentLocalApi(client);
-
-            var _encryptionCredentialDetails = new EncryptionCredentialDetails
-            {
-                // These settings are set in the Adyen Customer area, and below must match what is
-                // configured in Adyen. Once you match them, make sure to "pull down the config", so the 
-                // terminal has the settings applied
-                AdyenCryptoVersion = 1,
-                KeyIdentifier = "CryptoKeyIdentifier12345",
-                Password = "p@ssw0rd123456",
-                KeyVersion = 1
-            };
-
-            // Please replace the terminalId with the ID of your terminal (this can be seen from the customer area),
-            // and is of the format {TerminalModel}={SerialNumber}
-
-            var terminalId = "P400Plus-275266890";
-            SaleToPOIRequest paymentRequest = CreatePosPaymentRequest(terminalId);
-            // Log the payment request to console
-            Console.WriteLine(JsonConvert.SerializeObject(paymentRequest, Formatting.Indented));
-            // Stop the execution so you can have a look and make sure your payment request looks right
-            Console.ReadLine();
-
-            SaleToPOIResponse saleToPoiResponse = posPaymentLocalApi.TerminalApiLocal(paymentRequest, _encryptionCredentialDetails);
-            // Now my terminal is lit up asking for payment, now tap card and get response
-            Console.WriteLine(JsonConvert.SerializeObject(saleToPoiResponse, Formatting.Indented));
-            Console.ReadLine();
+            _logger = logger;
+            _urlService = urlService;
+            _paymentsService = paymentsService;
+            _merchantAccount = options.Value.ADYEN_MERCHANT_ACCOUNT;
         }
 
-        public static SaleToPOIRequest CreatePosPaymentRequest(String terminalId)
+        [HttpPost("api/sessions")]
+        public async Task<ActionResult<CreateCheckoutSessionResponse>> Sessions(CancellationToken cancellationToken = default)
         {
-            Random random = new Random();
-            int reference = random.Next();
-
-            SaleToPOIRequest saleToPoiRequest = new SaleToPOIRequest()
+            var orderRef = Guid.NewGuid();
+            var sessionsRequest = new CreateCheckoutSessionRequest()
             {
-                MessageHeader = new MessageHeader
+                MerchantAccount = _merchantAccount, // Required.
+                Reference = orderRef.ToString(), // Required.
+                Channel = CreateCheckoutSessionRequest.ChannelEnum.Web,
+                Amount = new Amount("EUR", 10000), // Value is 100€ in minor units.
+                
+                // Required for 3DS2 redirect flow.
+                ReturnUrl = $"{_urlService.GetHostUrl()}/redirect?orderRef={orderRef}",
+
+                // Used for klarna, klarna is not supported everywhere, hence why we've defaulted to countryCode "NL" as it supports the following payment methods below:
+                // "Pay now", "Pay later" and "Pay over time", see docs for more info: https://docs.adyen.com/payment-methods/klarna#supported-countries.
+                CountryCode = "NL",
+                LineItems = new List<LineItem>()
                 {
-                    MessageType = MessageType.Request,
-                    MessageClass = MessageClassType.Service,
-                    MessageCategory = MessageCategoryType.Payment,
-                    SaleID = "DemoCashRegister",
-                    POIID = terminalId,
-                    ServiceID = DateTime.Now.ToString("ddHHmmss") //this should be unique
-                },
-                MessagePayload = new PaymentRequest()
-                {
-                    SaleData = new SaleData()
-                    {
-                        SaleTransactionID = new TransactionIdentification()
-                        {
-                            TransactionID = reference.ToString(),
-                            TimeStamp = DateTime.Now
-                        },
-                    },
-                    PaymentTransaction = new PaymentTransaction()
-                    {
-                        AmountsReq = new AmountsReq()
-                        {
-                            Currency = "GBP",
-                            RequestedAmount = 10
-                        }
-                    },
-                    PaymentData = new PaymentData()
-                    {
-                        PaymentType = PaymentType.Normal
-                    }
-                },
-                SecurityTrailer = new ContentInformation() { }
+                    new LineItem(quantity: 1, amountIncludingTax: 5000, description: "Sunglasses"),
+                    new LineItem(quantity: 1, amountIncludingTax: 5000, description: "Headphones")
+                }
             };
-            return saleToPoiRequest;
+
+            try
+            {
+                var res = await _paymentsService.SessionsAsync(sessionsRequest, cancellationToken: cancellationToken);
+                _logger.LogInformation($"Response for Payments API:\n{res}\n");
+                return res;
+            }
+            catch (Adyen.HttpClient.HttpClientException e)
+            {
+                _logger.LogError($"Request for Payments failed:\n{e.ResponseBody}\n");
+                throw;
+            }
         }
     }
 }
