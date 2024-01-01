@@ -1,5 +1,3 @@
-'use strict'
-
 const Razorpay = require('razorpay')
 
 let rzp = new Razorpay({
