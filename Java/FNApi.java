@@ -16,6 +16,6 @@ import io.swagger.annotations.ApiParam;
 @javax.annotation.Generated(value = "", date = "")
 @Controller
 @RequestMapping("${path}")
-public class Controller {
+public class controller_ {
   private static final Logger log = logs;
   }
