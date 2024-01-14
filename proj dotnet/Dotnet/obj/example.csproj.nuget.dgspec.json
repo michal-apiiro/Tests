@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj": {}
+    "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj": {}
   },
   "projects": {
-    "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj": {
+    "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj",
+        "projectUniqueName": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj",
         "projectName": "example",
-        "projectPath": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/example.csproj",
+        "projectPath": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj",
         "packagesPath": "/Users/apiiro/.nuget/packages/",
-        "outputPath": "/Users/apiiro/code/Test stuffs/Tests/proj dotnet/Dotnet/obj/",
+        "outputPath": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/apiiro/.nuget/NuGet/NuGet.Config"
