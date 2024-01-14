@@ -6,9 +6,10 @@ import (
     "github.com/gorilla/sessions"
 )
 
-var store = sessions.NewCookieStore([]byte("your-secret-key"))
+
 
 func main() {
+    var store = sessions.NewCookieStore([]byte("your-secret-key"))
     http.HandleFunc("/set-session", SetSession)
     http.HandleFunc("/get-session", GetSession)
 
