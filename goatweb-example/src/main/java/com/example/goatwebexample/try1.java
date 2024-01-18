@@ -48,7 +48,7 @@
  
  @AssignmentHints({"spoofcookie.hint1", "spoofcookie.hint2", "spoofcookie.hint3"})
  @RestController
- public class SpoofCookieAssignment extends AssignmentEndpoint {
+ public class try1 extends AssignmentEndpoint {
  
      private static final String COOKIE_NAME = "spoof_auth";
      private static final String COOKIE_INFO =
