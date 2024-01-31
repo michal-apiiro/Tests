@@ -1,15 +1,10 @@
-from django.contrib.admin.widgets import FilteredSelectMultiple
-from django import forms
+from django.conf import settings
+from django.contrib import admin
+from django.urls import include, path
 
-def func(num1,num2,model,field):
-    class formClass(forms.ModelForm):
-        vars()[field] = forms.ModelMultipleChoiceField(
-            query=model.objects.all(),
-            label=(num1),
-            widget=FilteredSelectMultiple(
-                (num2),
-                False,
-            ),
-        )
-
-    return fromClass
+urlpatterns = [
+    path('path1/', admin.site.urls),
+    path("path2/", include("namespace1.urls", namespace="namespace1")),
+    path("path3/", include("namespace2.urls", namespace="namespace2")),
+    path(f"path4/{settings.CHECK_SECRET_TOKEN}/", include("blabla.urls")),
+]
