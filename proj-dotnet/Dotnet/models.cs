@@ -7,7 +7,8 @@ namespace testDataModel
     public class Event
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; 
+        }
         [Required(AllowEmptyStrings = false), StringLength(5)]
         public string DeviceId { get; set; }
 
