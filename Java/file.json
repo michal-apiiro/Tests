@@ -1,0 +1,8 @@
+["Java","Node","Python","Dotnet","Go"]
+.forEach
+(
+language => 
+{lastCommits({[`${language}State.UseParentFeatures`]: false}).forEach(commit =>
+{db.commits.updateOne({Sha:commit.CommitSha, RepositoryKey: commit.RepositoryKey}, {$set:{[`${language}State.ExtractionRevision`]: 0, SyncRevision: 0}
+})});
+});

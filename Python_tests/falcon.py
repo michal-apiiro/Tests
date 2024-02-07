@@ -12,4 +12,8 @@ def main():
     ])
 
     # Application routes
-    app.add_route('/', jsonrpc.JSONRPCResource(cache_region))
+    app.add_route('/', jsonrpc.JSORPCResource(cache_region))
+
+class JSONRPCResource(BaseResource):
+    def on_post(self, req, resp):
+        return "Siu"
