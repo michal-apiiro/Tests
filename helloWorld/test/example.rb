@@ -6,22 +6,23 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 
-# Example usage
-puts Date.today
-puts MyModule.greet
+class example
+    # Example usage
+    puts Date.today
+    puts MyModule.greet
 
-# Generate and print a fake name and email address
-puts "Fake Name: #{Faker::Name.name}"
-puts "Fake Email: #{Faker::Internet.email}"
+    # Generate and print a fake name and email address
+    puts "Fake Name: #{Faker::Name.name}"
+    puts "Fake Email: #{Faker::Internet.email}"
 
-# Example JSON data
-json_data = '{"name": "John", "age": 30, "city": "New York"}'
-# Parsing JSON data
-parsed_data = JSON.parse(json_data)
-# Accessing parsed JSON data
-puts "Name: #{parsed_data['name']}"
-puts "Age: #{parsed_data['age']}"
-puts "City: #{parsed_data['city']}"
+    # Example JSON data
+    json_data = '{"name": "John", "age": 30, "city": "New York"}'
+    # Parsing JSON data
+    parsed_data = JSON.parse(json_data)
+    # Accessing parsed JSON data
+    puts "Name: #{parsed_data['name']}"
+    puts "Age: #{parsed_data['age']}"
+    puts "City: #{parsed_data['city']}"
 
 
 
