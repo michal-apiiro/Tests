@@ -1,5 +1,6 @@
 # user.rb
 require 'active_record'
+require 'rails'
 
 class User < ActiveRecord::Base
 end
