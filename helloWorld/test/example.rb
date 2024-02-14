@@ -1,6 +1,8 @@
 
 require 'faker'
 require 'date'
+require 'rails'
+require 'sinatra'
 require_relative 'my_module'
 require 'bundler/setup'
 Bundler.require(:default)
