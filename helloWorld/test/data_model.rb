@@ -1,6 +1,8 @@
 # user.rb
 require 'active_record'
 require 'rails'
+require 'bcrypt'
+require 'cuba'
 
 class User < ActiveRecord::Base
 end
