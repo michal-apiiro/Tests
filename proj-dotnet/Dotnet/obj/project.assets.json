@@ -276,11 +276,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj",
+      "projectUniqueName": "/Users/apiiro/code/Test_stuffs/Tests/proj-dotnet/Dotnet/example.csproj",
       "projectName": "example",
-      "projectPath": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj",
+      "projectPath": "/Users/apiiro/code/Test_stuffs/Tests/proj-dotnet/Dotnet/example.csproj",
       "packagesPath": "/Users/apiiro/.nuget/packages/",
-      "outputPath": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/obj/",
+      "outputPath": "/Users/apiiro/code/Test_stuffs/Tests/proj-dotnet/Dotnet/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/apiiro/.nuget/NuGet/NuGet.Config"
@@ -324,12 +324,22 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.15, 7.0.15]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.15, 7.0.15]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.306/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
       }
     }
   }

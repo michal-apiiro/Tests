@@ -1,14 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "fqds0roqNV/uwrAIRLBEoFdOAxfs7/E/Ejl9S2sFolbP/ZSnusgzeiIKkOtpZ5fyVTAmJ9Dif19I6ZgWZwsWHQ==",
+  "dgSpecHash": "8p/uwSpmBs6wAG6/aw75cSGDUckja8QAucJKJyAdCzscxuXawSyMW4OYtIyoUiLimlc1Gw5/wxW3HTHYyEaNEg==",
   "success": true,
-  "projectFilePath": "/Users/apiiro/code/Test_stuffs/Tests/proj dotnet/Dotnet/example.csproj",
+  "projectFilePath": "/Users/apiiro/code/Test_stuffs/Tests/proj-dotnet/Dotnet/example.csproj",
   "expectedPackageFiles": [
     "/Users/apiiro/.nuget/packages/carter/7.2.0/carter.7.2.0.nupkg.sha512",
     "/Users/apiiro/.nuget/packages/fluentvalidation/11.0.1/fluentvalidation.11.0.1.nupkg.sha512",
     "/Users/apiiro/.nuget/packages/microsoft.extensions.dependencymodel/7.0.0/microsoft.extensions.dependencymodel.7.0.0.nupkg.sha512",
     "/Users/apiiro/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/apiiro/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/Users/apiiro/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/apiiro/.nuget/packages/microsoft.netcore.app.ref/7.0.15/microsoft.netcore.app.ref.7.0.15.nupkg.sha512",
+    "/Users/apiiro/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.15/microsoft.aspnetcore.app.ref.7.0.15.nupkg.sha512"
   ],
   "logs": []
 }
