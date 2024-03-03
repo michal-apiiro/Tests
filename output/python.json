@@ -1,0 +1,231 @@
+{
+  "Language": 4,
+  "SourceFiles": [
+    {
+      "EntityType": 0,
+      "Path": "FalconApi.py",
+      "Package": null,
+      "Imports": [
+        {
+          "Name": "falcon",
+          "Alias": ""
+        },
+        {
+          "Name": "Request",
+          "Alias": ""
+        }
+      ],
+      "Methods": [],
+      "Classes": [],
+      "Fields": [],
+      "Routers": [],
+      "UnresolvedApiAttributes": [
+        {
+          "UnresolvedAttribute": {
+            "ApiFrameworkName": "Falcon",
+            "RegistrationLocation": {
+              "Path": "FalconApi.py",
+              "Position": {
+                "Line": 0,
+                "Column": 0
+              }
+            },
+            "MiddlewareSequence": null,
+            "Route": "/my_route",
+            "HttpMethod": {
+              "Method": "Request"
+            }
+          },
+          "HandlerPosition": {
+            "Line": 0,
+            "Column": 0
+          },
+          "MiddlewareArguments": [],
+          "PossibleHandlerLocations": null
+        },
+        {
+          "UnresolvedAttribute": {
+            "ApiFrameworkName": "Falcon",
+            "RegistrationLocation": {
+              "Path": "FalconApi.py",
+              "Position": {
+                "Line": 0,
+                "Column": 0
+              }
+            },
+            "MiddlewareSequence": null,
+            "Route": "/my_route",
+            "HttpMethod": {
+              "Method": "Request"
+            }
+          },
+          "HandlerPosition": {
+            "Line": 0,
+            "Column": 0
+          },
+          "MiddlewareArguments": [],
+          "PossibleHandlerLocations": null
+        },
+        {
+          "UnresolvedAttribute": {
+            "ApiFrameworkName": "Falcon",
+            "RegistrationLocation": {
+              "Path": "FalconApi.py",
+              "Position": {
+                "Line": 0,
+                "Column": 0
+              }
+            },
+            "MiddlewareSequence": null,
+            "Route": "/my_route",
+            "HttpMethod": {
+              "Method": "Request"
+            }
+          },
+          "HandlerPosition": {
+            "Line": 0,
+            "Column": 0
+          },
+          "MiddlewareArguments": [],
+          "PossibleHandlerLocations": null
+        },
+        {
+          "UnresolvedAttribute": {
+            "ApiFrameworkName": "Falcon",
+            "RegistrationLocation": {
+              "Path": "FalconApi.py",
+              "Position": {
+                "Line": 0,
+                "Column": 0
+              }
+            },
+            "MiddlewareSequence": null,
+            "Route": "/my_route",
+            "HttpMethod": {
+              "Method": "Request"
+            }
+          },
+          "HandlerPosition": {
+            "Line": 0,
+            "Column": 0
+          },
+          "MiddlewareArguments": [],
+          "PossibleHandlerLocations": null
+        }
+      ],
+      "MethodCalls": [
+        {
+          "EntityType": 3,
+          "Position": {
+            "Line": 4,
+            "Column": 13
+          },
+          "Range": {
+            "StartPosition": {
+              "Line": 0,
+              "Column": 0
+            },
+            "EndPosition": {
+              "Line": 0,
+              "Column": 0
+            }
+          },
+          "DebugInfo": "falcon.API()",
+          "ResolvedFullPath": null,
+          "ResolvedDeclarationFilePath": null,
+          "MethodName": "API",
+          "IsInstanceCall": true,
+          "PredecessorInMethodCallChain": null,
+          "SuccessorInMethodCallChain": null,
+          "CallingEntitySymbol": null,
+          "MethodCallArguments": null
+        },
+        {
+          "EntityType": 3,
+          "Position": {
+            "Line": 5,
+            "Column": 4
+          },
+          "Range": {
+            "StartPosition": {
+              "Line": 0,
+              "Column": 0
+            },
+            "EndPosition": {
+              "Line": 0,
+              "Column": 0
+            }
+          },
+          "DebugInfo": "app.add_route('/my_route',Request.Request())",
+          "ResolvedFullPath": null,
+          "ResolvedDeclarationFilePath": null,
+          "MethodName": "add_route",
+          "IsInstanceCall": true,
+          "PredecessorInMethodCallChain": null,
+          "SuccessorInMethodCallChain": null,
+          "CallingEntitySymbol": null,
+          "MethodCallArguments": null
+        },
+        {
+          "EntityType": 3,
+          "Position": {
+            "Line": 5,
+            "Column": 35
+          },
+          "Range": {
+            "StartPosition": {
+              "Line": 0,
+              "Column": 0
+            },
+            "EndPosition": {
+              "Line": 0,
+              "Column": 0
+            }
+          },
+          "DebugInfo": "Request.Request()",
+          "ResolvedFullPath": null,
+          "ResolvedDeclarationFilePath": null,
+          "MethodName": "Request",
+          "IsInstanceCall": true,
+          "PredecessorInMethodCallChain": null,
+          "SuccessorInMethodCallChain": null,
+          "CallingEntitySymbol": null,
+          "MethodCallArguments": null
+        }
+      ],
+      "AssignStatements": [
+        {
+          "Text": "app=falcon.API()",
+          "Left": {
+            "Range": {
+              "StartPosition": {
+                "Line": 4,
+                "Column": 0
+              },
+              "EndPosition": {
+                "Line": 4,
+                "Column": 0
+              }
+            },
+            "Text": "app"
+          },
+          "Right": {
+            "Range": {
+              "StartPosition": {
+                "Line": 4,
+                "Column": 6
+              },
+              "EndPosition": {
+                "Line": 4,
+                "Column": 17
+              }
+            },
+            "Text": "falcon.API()"
+          }
+        }
+      ],
+      "UndeterminedEntityPropertiesInsights": [],
+      "FrameworkUsagesFromInsight": []
+    }
+  ]
+}
