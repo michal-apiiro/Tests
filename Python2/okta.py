@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from okta.client import Client as OktaClient
-from okta import UsersClient
+from Python2.okta import UsersClient
 
 def get_okta_user_list(_env_type):
     secrets = get_secret("dremio-utils")
