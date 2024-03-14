@@ -1,14 +1,8 @@
-import logging
-import requests
-from admin_portal import auth
-
-
-class Class(Resource):
-
-    @auth.requires_auth
-    def get(self):
-        try:
-            is_authorized = False
-
-        except Exception as e:
-            pass
+import json
+from flask import Flask
+app = Flask(__name__)
+@app.route('/')
+def index():
+    return json.dumps({'name': 'alice',
+                       'email': 'alice@outlook.com'})
+app.run()
