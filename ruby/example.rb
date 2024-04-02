@@ -1,4 +1,4 @@
-equire "nats/io/client"
+require "nats/io/client"
 
 module Nats
   class Connection
